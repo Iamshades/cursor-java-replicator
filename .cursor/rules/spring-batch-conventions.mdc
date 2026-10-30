@@ -1,0 +1,17 @@
+---
+description: Spring Batch specifics for job, step, reader, processor, writer and tasklet code and batch XML.
+globs: **/*Job*.java, **/*Step*.java, **/*Reader*.java, **/*Writer*.java, **/*Processor*.java, **/*Tasklet*.java, **/*Partitioner*.java, **/batch/**/*.java, **/batch-jobs/*.xml, **/*job*.xml
+alwaysApply: false
+---
+
+# Spring Batch code
+
+- Detect the Spring Batch version from the build before writing code. Batch 4: `JobBuilderFactory`/`StepBuilderFactory`. Batch 5: `new JobBuilder(name, jobRepository)`, `.chunk(n, transactionManager)`, `ItemWriter.write(Chunk)`. Batch 6: check the migration guide (package moves, `JobOperator`). Never mix styles in one codebase.
+- On Boot 3+, do not add `@EnableBatchProcessing` unless the project already uses it (it turns off Boot's batch auto-configuration).
+- Job and step names are part of the operational contract (metadata tables, monitoring, restarts). Derive new names from the anchor's naming scheme; never rename existing ones.
+- Keep chunk size, skip/retry/no-rollback rules, restart settings and transition patterns equal to the anchor unless a delta changes them.
+- Beans using `#{jobParameters[...]}` or `#{stepExecution...}` must be `@StepScope` (or `@JobScope`).
+- Cursor-based readers are not thread-safe: multi-threaded steps need paging readers or `SynchronizedItemStreamReader`.
+- Paging readers need a unique sort key. Unordered queries make output order unstable; note it for parity.
+- A processor returning `null` filters the item (counts as filter, not skip). Throwing a skippable exception skips it. Preserve which one the source does.
+- Tests: `@SpringBatchTest` + `JobLauncherTestUtils` (call `setJob` when several jobs exist), `StepScopeTestUtils` for step-scoped beans, golden files for file outputs.

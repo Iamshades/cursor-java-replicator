@@ -1,0 +1,338 @@
+{
+  "key": "FIN-482",
+  "names": {
+    "customfield_10035": "Acceptance Criteria"
+  },
+  "fields": {
+    "summary": "Credit note export job - replicate invoiceExportJob for credit notes",
+    "issuetype": {
+      "name": "Story"
+    },
+    "status": {
+      "name": "Ready for Dev"
+    },
+    "priority": {
+      "name": "High"
+    },
+    "labels": [
+      "batch",
+      "erp"
+    ],
+    "components": [
+      {
+        "name": "invoice-batch"
+      }
+    ],
+    "fixVersions": [
+      {
+        "name": "1.5.0"
+      }
+    ],
+    "parent": {
+      "key": "FIN-400",
+      "fields": {
+        "summary": "ERP credit note integration"
+      }
+    },
+    "description": {
+      "type": "doc",
+      "version": 1,
+      "content": [
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 2
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "Context"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Finance needs credit notes in the ERP. Build a "
+            },
+            {
+              "type": "text",
+              "text": "creditNoteExportJob",
+              "marks": [
+                {
+                  "type": "code"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": " that works like the existing invoiceExportJob, reading from INVOICE where type = CREDIT_NOTE."
+            }
+          ]
+        },
+        {
+          "type": "heading",
+          "attrs": {
+            "level": 2
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "File layout"
+            }
+          ]
+        },
+        {
+          "type": "table",
+          "content": [
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableHeader",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Field"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableHeader",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "Format"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "invoiceId"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "number"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "tableRow",
+              "content": [
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "amountCents"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "tableCell",
+                  "content": [
+                    {
+                      "type": "paragraph",
+                      "content": [
+                        {
+                          "type": "text",
+                          "text": "negative cents, e.g. -1250"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "text": "Output file CN_<businessDate>.txt in erp.export.dir. Schedule 0 0 3 * * *."
+            }
+          ]
+        }
+      ]
+    },
+    "customfield_10035": {
+      "type": "doc",
+      "version": 1,
+      "content": [
+        {
+          "type": "bulletList",
+          "content": [
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Job must export only APPROVED credit notes for the business date"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "File must be pipe-delimited with the same header as the invoice file"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "File must end with a trailer line T|<record count>"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Amounts should be exported as negative cents"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "content": [
+                {
+                  "type": "paragraph",
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "Nice to have: email ops when more than 10 records are skipped"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "subtasks": [
+      {
+        "key": "FIN-483",
+        "fields": {
+          "summary": "Add CN trailer"
+        }
+      }
+    ],
+    "issuelinks": [
+      {
+        "type": {
+          "outward": "relates to",
+          "inward": "relates to"
+        },
+        "outwardIssue": {
+          "key": "FIN-310",
+          "fields": {
+            "summary": "Invoice export to ERP"
+          }
+        }
+      }
+    ],
+    "attachment": [
+      {
+        "filename": "CN_2026-10-29_sample.txt",
+        "size": 412,
+        "mimeType": "text/plain"
+      }
+    ],
+    "comment": {
+      "comments": [
+        {
+          "author": {
+            "displayName": "Finance PO"
+          },
+          "created": "2026-10-28T10:00:00.000+0000",
+          "body": {
+            "type": "doc",
+            "version": 1,
+            "content": [
+              {
+                "type": "paragraph",
+                "content": [
+                  {
+                    "type": "text",
+                    "text": "Time zone is Europe/Berlin for the schedule."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

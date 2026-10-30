@@ -1,0 +1,17 @@
+---
+description: Conventions for Java code written while replicating or extending an existing Spring / Java application.
+globs: **/*.java
+alwaysApply: false
+---
+
+# Java code written by the agent
+
+1. **The codebase wins.** Before writing a class, open its nearest sibling (same layer, same package family) and match: package layout, naming suffixes, injection style, logging framework and message style, exception types, null handling, use of records/Lombok, formatting, test style. These defaults apply only where the codebase has no convention.
+2. Match the project's language level and namespace: check `maven.compiler.release` / toolchain and `javax.*` vs `jakarta.*` before using records, text blocks, `var`, switch expressions or new APIs.
+3. Constructor injection; no field `@Autowired` in new classes unless every sibling uses it.
+4. Money: `BigDecimal` with explicit scale and `RoundingMode` identical to the source. Never `double` for amounts.
+5. Dates: `java.time` with explicit `ZoneId` / pattern identical to the source; inject `Clock` where "now" matters for tests.
+6. Externalize environment-specific values (paths, URLs, cron, zones) into properties with the same naming scheme as existing keys.
+7. Log with the existing logger; no `System.out`; never log secrets or full personal records.
+8. Every new rule, delta and requirement gets a focused test; reuse the project's test base classes and fixtures.
+9. No new libraries without an approved decision record.

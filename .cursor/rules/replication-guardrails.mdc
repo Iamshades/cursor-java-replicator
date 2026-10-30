@@ -1,0 +1,17 @@
+---
+description: Guardrails for analyzing and replicating Java applications (evidence, scope, secrets, safety). Applies whenever .replication/ artifacts or the java-replicate skills are in use.
+globs: .replication/**
+alwaysApply: false
+---
+
+# Replication guardrails
+
+- Claims about existing code cite `path:line` or carry a status: `VERIFIED`, `INFERRED`, `CANDIDATE`, `UNVERIFIED`, `CONFLICT`.
+- Keep **Current** (source), **Requested** (ticket/user) and **Proposed** (agent) separate in every document and answer.
+- Replicate business rules, data formats and operational behavior exactly; change only what an approved delta (`D-##`) or requirement (`REQ-`) states.
+- Bugs or smells found in the source: flag with a `NOTE` and a `DEC-`; never fix or copy them silently.
+- Never write secret values into files, chat or reports; reference property names, env vars or vault paths.
+- Ask before: first build/test run, any dependency download, starting the app, touching any database/broker/remote system, writing to Jira or Confluence, deleting files.
+- Never weaken, skip or delete existing tests to make a build pass.
+- Report results honestly: a check that did not run is `NOT RUN` with the reason.
+- Artifacts live in `.replication/` with the IDs from the `java-replicate` skill's `references/artifact-contract.md`.

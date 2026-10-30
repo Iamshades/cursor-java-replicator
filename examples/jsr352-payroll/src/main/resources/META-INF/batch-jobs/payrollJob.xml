@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job id="payrollJob" xmlns="http://xmlns.jcp.org/xml/ns/javaee" version="1.0" restartable="true">
+  <step id="loadTimesheets" next="calcDecision">
+    <chunk item-count="200" skip-limit="10">
+      <reader ref="timesheetReader">
+        <properties><property name="inputFile" value="#{jobParameters['inputFile']}"/></properties>
+      </reader>
+      <processor ref="payCalculator"/>
+      <writer ref="payslipWriter"/>
+      <skippable-exception-classes>
+        <include class="java.lang.NumberFormatException"/>
+      </skippable-exception-classes>
+    </chunk>
+  </step>
+  <decision id="calcDecision" ref="bonusDecider">
+    <next on="BONUS" to="applyBonus"/>
+    <end on="NO_BONUS"/>
+  </decision>
+  <step id="applyBonus">
+    <batchlet ref="bonusBatchlet"/>
+  </step>
+</job>

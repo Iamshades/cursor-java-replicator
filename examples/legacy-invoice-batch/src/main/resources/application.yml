@@ -1,0 +1,14 @@
+spring:
+  batch:
+    job:
+      enabled: false
+  datasource:
+    url: jdbc:oracle:thin:@db-prod:1521/ERP
+    username: invoice_app
+    password: SuperSecret123
+erp:
+  export:
+    dir: /data/erp/outbound
+invoice:
+  export:
+    cron: "0 30 1 * * *"

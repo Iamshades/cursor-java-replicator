@@ -1,0 +1,12 @@
+FIN-490 Expose credit note export trigger over REST
+
+As an ops engineer I want to start the credit note export from the ops portal.
+
+Acceptance Criteria:
+- POST /api/jobs/credit-note-export/{businessDate} starts creditNoteExportJob
+- Response returns the batch status like the invoice trigger
+- Endpoint must require role OPS_ADMIN
+
+Given a valid business date
+When I call the endpoint
+Then the job is started and status STARTED or COMPLETED is returned
